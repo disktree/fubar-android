@@ -1,0 +1,7 @@
+bin/
+gen/
+*.keystore
+local.properties
+NOTES*
+TODO*
+release.sh
