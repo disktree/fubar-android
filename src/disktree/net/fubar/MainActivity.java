@@ -44,7 +44,9 @@ public class MainActivity extends Activity {
         settings.setAllowContentAccess(true);
         settings.setAllowFileAccess(true);
         settings.setAllowFileAccessFromFileURLs(true);
+        settings.setAllowUniversalAccessFromFileURLs(true);
         settings.setDomStorageEnabled(true);
+		settings.setJavaScriptCanOpenWindowsAutomatically(true);
         //settings.setUseWideViewPort(true);
         //settings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
 
@@ -76,7 +78,7 @@ public class MainActivity extends Activity {
             setupSystemUi();
     }
 
-	private void setupSystemUi() {
+	private final void setupSystemUi() {
         getWindow().getDecorView().setSystemUiVisibility( systemUiFlags );
     }
 

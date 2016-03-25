@@ -18,7 +18,7 @@ public final class WebApp {
     }
 
     @JavascriptInterface
-    public void shareImage( String text ) {
+    public final void shareImage( String text ) {
         Intent sendIntent = new Intent();
         sendIntent.setAction( Intent.ACTION_SEND );
         //sendIntent.putExtra( Intent.EXTRA_SUBJECT, subject );
@@ -28,17 +28,17 @@ public final class WebApp {
     }
 
     @JavascriptInterface
-    public void downloadImage( String url, String file, String description, String title ) {
+    public final void downloadImage( String url, String file, String description, String title ) {
 
-        android.util.Log.d( App.TAG, url );
+        //android.util.Log.d( App.TAG, url );
 
-        DownloadManager.Request request = new DownloadManager.Request( Uri.parse( url ) );
-        request.setDescription( description );
-        request.setTitle( title );
-        request.setDestinationInExternalPublicDir( Environment.DIRECTORY_DOWNLOADS, "myfile.gif" );
+        DownloadManager.Request req = new DownloadManager.Request( Uri.parse( url ) );
+		req.setDestinationInExternalPublicDir( Environment.DIRECTORY_DOWNLOADS, file );
+        req.setDescription( description );
+        req.setTitle( title );
 
         DownloadManager manager = (DownloadManager) activity.getSystemService( Context.DOWNLOAD_SERVICE );
-        manager.enqueue( request );
+        manager.enqueue( req );
 
         /*
         BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -71,11 +71,11 @@ public final class WebApp {
         //registerReceiver( receiver, new IntentFilter( DownloadManager.ACTION_DOWNLOAD_COMPLETE ) );
         */
 
-        android.widget.Toast.makeText( activity, "Download complete", android.widget.Toast.LENGTH_SHORT ).show();
+        android.widget.Toast.makeText( activity, R.string.toast_download_complete, android.widget.Toast.LENGTH_SHORT ).show();
     }
 
     @JavascriptInterface
-    public void showToast( String msg ) {
+    public final void showToast( String msg ) {
         android.widget.Toast.makeText( activity, msg, android.widget.Toast.LENGTH_SHORT ).show();
     }
 }

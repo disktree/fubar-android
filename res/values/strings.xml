@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
+
     <string name="app_name">FUbar</string>
+
+    <string name="toast_download_complete">Download Complete</string>
+
 </resources>
