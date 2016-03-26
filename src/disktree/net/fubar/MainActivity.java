@@ -32,22 +32,26 @@ public class MainActivity extends Activity {
 
 		setupSystemUi();
 
-        setContentView( R.layout.activity_main );
+        //setContentView( R.layout.activity_main );
 
-		webview = (WebView) findViewById(R.id.webview);
+		//webview = (WebView) findViewById(R.id.webview);
+		webview = new WebView( MainActivity.this );
         webview.setBackgroundColor(0x00000000);
         //webview.clearCache(true);
         //webview.setInitialScale(0);
 
+		webview.setWebViewClient( new WebViewClient() );
+		//webview.setWebChromeClient( new AppChromeClient() );
+
 		WebSettings settings = webview.getSettings();
-        settings.setJavaScriptEnabled(true);
-        settings.setAllowContentAccess(true);
-        settings.setAllowFileAccess(true);
-        settings.setAllowFileAccessFromFileURLs(true);
-        settings.setAllowUniversalAccessFromFileURLs(true);
-        settings.setDomStorageEnabled(true);
-		settings.setJavaScriptCanOpenWindowsAutomatically(true);
-        //settings.setUseWideViewPort(true);
+        settings.setJavaScriptEnabled( true );
+        settings.setAllowContentAccess( true );
+        settings.setAllowFileAccess( true );
+        settings.setAllowFileAccessFromFileURLs( true );
+        settings.setAllowUniversalAccessFromFileURLs( true );
+        settings.setDomStorageEnabled( true );
+		settings.setJavaScriptCanOpenWindowsAutomatically( true );
+        //settings.setUseWideViewPort( true );
         //settings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
 
 		webview.addJavascriptInterface( new WebApp(this), "AndroidApp" );
@@ -63,6 +67,8 @@ public class MainActivity extends Activity {
         });
 
 		webview.loadUrl( "file:///android_asset/index.html" );
+
+		setContentView( webview );
     }
 
 	@Override
