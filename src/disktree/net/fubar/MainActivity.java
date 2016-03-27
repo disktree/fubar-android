@@ -1,6 +1,7 @@
 package disktree.net.fubar;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -8,40 +9,35 @@ import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
+import disktree.net.fubar.App;
 
 public class MainActivity extends Activity {
 
+	static final int SYSTEM_UI_FLAGS =
+		View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+		| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+		| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+		| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+		| View.SYSTEM_UI_FLAG_FULLSCREEN
+		| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 	protected WebView webview;
-	protected int systemUiFlags;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate( Bundle savedInstanceState ) {
 
         super.onCreate( savedInstanceState );
 
-		this.requestWindowFeature( Window.FEATURE_NO_TITLE );
-		this.getWindow().addFlags( WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON );
-
-		systemUiFlags =
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-            | View.SYSTEM_UI_FLAG_FULLSCREEN
-            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-
+		requestWindowFeature( Window.FEATURE_NO_TITLE );
+		getWindow().addFlags( WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON );
 		setupSystemUi();
 
-        //setContentView( R.layout.activity_main );
-
-		//webview = (WebView) findViewById(R.id.webview);
 		webview = new WebView( MainActivity.this );
-        webview.setBackgroundColor(0x00000000);
+        webview.setBackgroundColor( 0x00000000 );
         //webview.clearCache(true);
         //webview.setInitialScale(0);
 
 		webview.setWebViewClient( new WebViewClient() );
-		//webview.setWebChromeClient( new AppChromeClient() );
+		webview.setWebChromeClient( new WebChromeClient( App.TAG ) );
 
 		WebSettings settings = webview.getSettings();
         settings.setJavaScriptEnabled( true );
@@ -61,7 +57,7 @@ public class MainActivity extends Activity {
             @Override
             public void onSystemUiVisibilityChange(int visibility) {
                 if( (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0 ) {
-                    decorView.setSystemUiVisibility( systemUiFlags );
+                    decorView.setSystemUiVisibility( SYSTEM_UI_FLAGS );
                 }
             }
         });
@@ -78,6 +74,16 @@ public class MainActivity extends Activity {
     }
 
 	@Override
+	public void onConfigurationChanged( Configuration newConfig ) {
+		super.onConfigurationChanged( newConfig );
+		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+		   android.widget.Toast.makeText(this, "landscape", android.widget.Toast.LENGTH_SHORT).show();
+	   } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+		   android.widget.Toast.makeText(this, "portrait", android.widget.Toast.LENGTH_SHORT).show();
+	   }
+	}
+
+	@Override
     public void onWindowFocusChanged( boolean hasFocus ) {
         super.onWindowFocusChanged( hasFocus );
         if( hasFocus )
@@ -85,7 +91,7 @@ public class MainActivity extends Activity {
     }
 
 	private final void setupSystemUi() {
-        getWindow().getDecorView().setSystemUiVisibility( systemUiFlags );
+        getWindow().getDecorView().setSystemUiVisibility( SYSTEM_UI_FLAGS );
     }
 
 	private final void log( String str ) {
