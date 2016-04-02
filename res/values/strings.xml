@@ -8,9 +8,4 @@
 
     <string name="toast_download_complete">Download Complete</string>
 
-	<!--
-	<string name="action_github">Source Code</string>
-	<string name="action_github_uri">https://github.com/tong/fubar</string>
-	-->
-
 </resources>

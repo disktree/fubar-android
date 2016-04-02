@@ -20,21 +20,23 @@ public class MainActivity extends Activity {
 		| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 		| View.SYSTEM_UI_FLAG_FULLSCREEN
 		| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-	protected WebView webview;
+
+	private WebView webview;
 
     @Override
     public void onCreate( Bundle savedInstanceState ) {
 
         super.onCreate( savedInstanceState );
 
-		requestWindowFeature( Window.FEATURE_NO_TITLE );
-		getWindow().addFlags( WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON );
-		setupSystemUi();
+		this.requestWindowFeature( Window.FEATURE_NO_TITLE );
+		this.getWindow().addFlags( WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON );
 
 		webview = new WebView( MainActivity.this );
-        webview.setBackgroundColor( 0x00000000 );
-        //webview.clearCache(true);
-        //webview.setInitialScale(0);
+        webview.setBackgroundColor( 0xff000000 );
+		//webview.setInitialScale(0);
+		if( App.DEBUG ) {
+			webview.clearCache( true );
+		}
 
 		webview.setWebViewClient( new WebViewClient() );
 		webview.setWebChromeClient( new WebChromeClient( App.TAG ) );
@@ -44,27 +46,27 @@ public class MainActivity extends Activity {
         settings.setAllowContentAccess( true );
         settings.setAllowFileAccess( true );
         settings.setAllowFileAccessFromFileURLs( true );
-        settings.setAllowUniversalAccessFromFileURLs( true );
-        settings.setDomStorageEnabled( true );
-		settings.setJavaScriptCanOpenWindowsAutomatically( true );
+        //settings.setAllowUniversalAccessFromFileURLs( true );
+		settings.setDomStorageEnabled( true );
+		//settings.setJavaScriptCanOpenWindowsAutomatically( true );
         //settings.setUseWideViewPort( true );
         //settings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
 
-		webview.addJavascriptInterface( new WebApp(this), "AndroidApp" );
-
-		final View decorView = getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener( new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if( (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0 ) {
-                    decorView.setSystemUiVisibility( SYSTEM_UI_FLAGS );
-                }
-            }
-        });
-
+		webview.addJavascriptInterface( new WebApp( this ), "AndroidApp" );
 		webview.loadUrl( "file:///android_asset/index.html" );
 
+		final View decorView = getWindow().getDecorView();
+		decorView.setOnSystemUiVisibilityChangeListener( new View.OnSystemUiVisibilityChangeListener() {
+			@Override
+			public void onSystemUiVisibilityChange( int visibility ) {
+				if( (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0 ) {
+					decorView.setSystemUiVisibility( SYSTEM_UI_FLAGS );
+				}
+			}
+		});
+
 		setContentView( webview );
+		setupSystemUi();
     }
 
 	@Override
@@ -73,28 +75,30 @@ public class MainActivity extends Activity {
         setupSystemUi();
     }
 
+	/*
 	@Override
 	public void onConfigurationChanged( Configuration newConfig ) {
 		super.onConfigurationChanged( newConfig );
+		log("onConfigurationChanged");
 		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 		   android.widget.Toast.makeText(this, "landscape", android.widget.Toast.LENGTH_SHORT).show();
 	   } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
 		   android.widget.Toast.makeText(this, "portrait", android.widget.Toast.LENGTH_SHORT).show();
 	   }
 	}
+	*/
 
 	@Override
     public void onWindowFocusChanged( boolean hasFocus ) {
         super.onWindowFocusChanged( hasFocus );
-        if( hasFocus )
-            setupSystemUi();
+        if( hasFocus ) setupSystemUi();
     }
 
 	private final void setupSystemUi() {
-        getWindow().getDecorView().setSystemUiVisibility( SYSTEM_UI_FLAGS );
+		disktree.net.fubar.App.setupSystemUi( this, SYSTEM_UI_FLAGS );
     }
 
-	private final void log( String str ) {
+	private static final void log( String str ) {
         android.util.Log.d( App.TAG, str );
     }
 }
