@@ -31,28 +31,37 @@ public class MainActivity extends Activity {
 		this.requestWindowFeature( Window.FEATURE_NO_TITLE );
 		this.getWindow().addFlags( WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON );
 
+
 		webview = new WebView( MainActivity.this );
-        webview.setBackgroundColor( 0xff000000 );
-		//webview.setInitialScale(0);
-		if( App.DEBUG ) {
-			webview.clearCache( true );
-		}
+		/*
+		if( savedInstanceState != null ) {
+			log( ""+(webview==null));
+			//webview.restoreState( savedInstanceState );
+		} else {
+		*/
+		webview.setBackgroundColor( 0xff000000 );
+		webview.setInitialScale( 0 );
 
 		webview.setWebViewClient( new WebViewClient() );
 		webview.setWebChromeClient( new WebChromeClient( App.TAG ) );
 
 		WebSettings settings = webview.getSettings();
-        settings.setJavaScriptEnabled( true );
-        settings.setAllowContentAccess( true );
-        settings.setAllowFileAccess( true );
-        settings.setAllowFileAccessFromFileURLs( true );
-        //settings.setAllowUniversalAccessFromFileURLs( true );
+		settings.setJavaScriptEnabled( true );
+		settings.setAllowContentAccess( true );
+		settings.setAllowFileAccess( true );
+		settings.setAllowFileAccessFromFileURLs( true );
+		//settings.setAllowUniversalAccessFromFileURLs( true );
 		settings.setDomStorageEnabled( true );
 		//settings.setJavaScriptCanOpenWindowsAutomatically( true );
-        //settings.setUseWideViewPort( true );
-        //settings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
+		//settings.setUseWideViewPort( true );
+		//settings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
 
 		webview.addJavascriptInterface( new WebApp( this ), "AndroidApp" );
+
+		if( App.DEBUG ) {
+			webview.clearCache( true );
+		}
+
 		webview.loadUrl( "file:///android_asset/index.html" );
 
 		final View decorView = getWindow().getDecorView();
@@ -75,18 +84,10 @@ public class MainActivity extends Activity {
         setupSystemUi();
     }
 
-	/*
 	@Override
 	public void onConfigurationChanged( Configuration newConfig ) {
 		super.onConfigurationChanged( newConfig );
-		log("onConfigurationChanged");
-		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-		   android.widget.Toast.makeText(this, "landscape", android.widget.Toast.LENGTH_SHORT).show();
-	   } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-		   android.widget.Toast.makeText(this, "portrait", android.widget.Toast.LENGTH_SHORT).show();
-	   }
 	}
-	*/
 
 	@Override
     public void onWindowFocusChanged( boolean hasFocus ) {
